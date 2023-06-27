@@ -1,0 +1,720 @@
+*{
+	box-sizing:border-box;
+}
+:root{
+	--blue-primary: #033e6a;
+	--blue-light: #9cc4e4;
+	--blue-secundary: #e9f2f9;
+	--blue-ligth-dark: #3a89c9;
+	--blue-secundario:#009de0;
+	--orange: #f26c4f;
+	--black: #222222;
+	--white:#FFFFFE;
+	--redondear: 20px;
+	--finde:red;
+}
+
+/*Calendario curso*/
+
+.calendar-wrapper {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 20px;
+}
+
+.hoja,.mes-calendario {
+  background: #f2f2f2;
+  padding: 1em 0;
+  box-shadow: 5px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 5px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 5px 10px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.calendar.weekday {
+  grid-gap: 7px;
+}
+
+.weekday {
+  background: #eee;
+  background: #fcffcd;
+  border: 1px solid gray;
+}
+
+.hoja > h2 {
+  text-align: center;
+  font-size: 27px;
+  font-family: inherit;
+}
+.mes-calendario > img{
+	width:100%;
+	height:320px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+ul li {
+  position: relative;
+}
+
+.verano {
+  background: grey;
+  color: white;
+  cursor: pointer;
+}
+
+.no-lectivo {
+  background: #fbc535;
+  color: white;
+  cursor: pointer;
+}
+
+.fiesta {
+  background: red;
+  color: white;
+  /*cursor: pointer;*/
+}
+
+.inicioi {
+  background: blue;
+  color: white;
+  cursor: pointer;
+}
+
+.fini {
+  background-color: #2fcbfb;/*#036987*/
+  color: white;
+  cursor: pointer;
+}
+
+.inicios {
+  background: #026a87;
+  color: white;
+  cursor: pointer;
+}
+
+.fins {
+  background-color: #487A07;/*#036987*/
+  color: white;
+  cursor: pointer;
+}
+
+.examenes {
+  background-color: #467b04;
+  color: white;
+  cursor: pointer;
+}
+
+#final.examenes {
+  background: linear-gradient(
+    to right,
+    #2eccfa 0%,
+    #2eccfa 50%,
+    #467b04 50%,
+    #467b04 100%
+  );
+  color: white;
+  cursor: pointer;
+}
+
+.ventana {
+  position: absolute;
+  /*top: 15px;*/
+  bottom: -2px;
+  left: -85px;
+  width: 200px;
+  background: aqua;
+  padding: 20px;
+  color: #333;
+  text-align: left;
+  border: 2px solid #aaa;
+  box-sizing: border-box;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.5s;
+  transform: translatex(-100px) translateY(-100px);
+  z-index: 99;
+}
+
+.ventana:before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: aqua;
+  bottom: -10px;
+  left: 90px;
+  transform: rotate(45deg);
+}
+
+li:hover .ventana {
+  visibility: visible;
+  opacity: 1;
+  transform: translatex(0px) translateY(-50px);
+}
+
+.nota {
+  font-size: 14px;
+}
+
+.tooltip, .tooltip-fijo {
+  display: flex;
+  border-radius: 10px;
+  box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  /*top: 15px;*/
+  bottom: 18%;  
+  left: 0%; 
+  width: 20em;
+  height: 15em;
+  background: transparent;
+  /*padding: 0px 20px 0px 0px;*/
+  color: #333;
+  text-align: left;
+  /*border: 1px solid #aaa;*/
+  box-sizing: border-box;
+  visibility: hidden;
+  opacity: 0;
+  transition: 0.3s ease all;
+  transform: translateY(10px);
+  z-index: 1000;
+  perspective: 1000px;
+}
+.tooltip-fijo {
+    height: 10em;
+	bottom: 27%;
+}
+.octubre>.tooltip-fijo{
+	left: 15%;    
+}
+.noviembre>.tooltip-fijo{
+	left: 35%;    
+}
+.diciembre>.tooltip-fijo{
+	left: 55%;    
+}
+.diciembre>.tooltip-fijo{
+	left: 55%;    
+}
+.enero>.tooltip-fijo{
+	height: 15em;
+	left: 75%; 
+	bottom: 18%;
+}
+.febrero>.tooltip-fijo{
+	left: -5%;
+    bottom: 7%;
+}
+.marzo>.tooltip-fijo{	
+	left: 15%; 
+	bottom: 7%;
+}
+.abril>.tooltip-fijo{	
+	left: 35%; 
+	bottom: 7%;
+}
+.mayo>.tooltip-fijo{	
+	left: 55%; 
+	bottom: 7%;
+}
+.junio>.tooltip-fijo{	
+	left: 75%; 
+	bottom: 7%;
+}
+.tooltip::after, .tooltip-fijo::after {
+  content: "";
+  display: inline-block;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid white;
+  position: absolute;
+  top: -15px;
+  left: calc(50% - 15px);
+}
+
+.tooltip-card, .tooltip-card-fijo {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 1s;
+  transform-style: preserve-3d;
+}
+
+.tooltip:hover .tooltip-card {
+  transform: rotateY(180deg);
+}
+
+.front,
+.back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.back {
+  transform: rotateY(180deg);
+  /*background-color: #333;*/
+  /*color: white;*/
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 5px 5px 50px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  padding: 0px 20px 0px 20px;
+}
+
+.tooltip .front .imagen, .tooltip-fijo .front .imagen {
+  width: 40%;
+}
+
+.tooltip .front .imagen img, .tooltip-fijo .front .imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px 0 0 10px;
+  vertical-align: top;
+}
+.octubre .tooltip-fijo .front .imagen img,.enero .tooltip-fijo .front .imagen img{
+	object-fit: contain;
+}
+.tooltip .front .info, .tooltip-fijo .front .info {
+  width: 60%;
+  /*overflow: hidden;*/
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.tooltip .front .info h4,.tooltip-fijo .front .info h4 {
+  font-weight: bold;
+  margin: 0px;
+  color: #036987;
+}
+
+.tooltip .front .info .nota,.tooltip-fijo .front .info .nota,
+.tooltip .back .objetivos .nota {
+  font-size: 11px;
+  color: #222;
+  margin-top: 0;
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.tooltip .back p {
+  font-size: 11px;
+  margin: 0;
+}
+
+.tooltip .back .actividad {
+  font-weight: bold;
+  color: #036987;
+}
+
+.tooltip .back h5 {
+  margin: 8px;
+}
+
+/* li:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0px);
+} */
+
+.sobrar {
+  word-wrap: break-word;
+  height: auto;
+}
+
+.septiembre:hover>.tooltip,.octubre:hover>.tooltip-fijo,.noviembre:hover>.tooltip-fijo,
+.diciembre:hover>.tooltip-fijo,.enero:hover>.tooltip-fijo,.febrero:hover>.tooltip-fijo,
+.marzo:hover>.tooltip-fijo,.abril:hover>.tooltip-fijo,.mayo:hover>.tooltip-fijo,
+.junio:hover>.tooltip-fijo{
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.boton_personalizado {
+  text-decoration: none;
+  padding: 7px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #ffffff;
+  background-color: #1883ba;
+  border-radius: 6px;
+  border: 2px solid #0016b0;
+  text-align: center;
+  margin-bottom:1em;
+}
+
+.boton_personalizado:hover {
+  color: #1883ba;
+  background-color: #ffffff;
+}
+
+@media screen and (min-width: 950px) and (max-width: 1119px) {
+  .ast-header-break-point .ast-primary-header-bar {
+    /*border-bottom-color: yellowgreen;*/
+  }
+
+  .main-header-menu > .menu-item > .menu-link {
+    font-size: 14px;
+  }
+
+  .main-header-menu .sub-menu .menu-item > .menu-link {
+    font-size: 14px;
+  }
+
+  div.calendar-wrapper {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  div.uagb-tabs__wrap {
+    margin: 0px;
+  }
+
+  td > img {
+    max-width: 30px;
+  }
+
+  div.uagb-tabs__wrap.uagb-tabs__vstyle6-mobile .uagb-tabs__body-wrap {
+    max-width: 95%;
+  }
+
+  div.wp-block-uagb-tabs.uagb-tabs__wrap.uagb-tabs__vstyle6-mobile
+    ul.uagb-tabs__panel {
+    min-width: 95%;
+    max-width: 95%;
+  }
+
+  div.wp-block-uagb-table.uagb-tabs__wrap.uagb-tabs__vstyle6-mobile
+    .uagb-tabs__body-wrap {
+    max-width: 95%;
+  }
+	/*.tooltip-fijo{		
+   
+    width: calc((100% - 30px));
+ 
+	}*/
+	.septiembre>.tooltip{
+	   left:0%;
+		bottom:30%;
+	}
+  .octubre>.tooltip-fijo{
+	   left:20%;
+	   bottom:36%;
+	}
+  .noviembre>.tooltip-fijo{
+	   left:44%;
+	   bottom:36%;
+	}
+  .diciembre>.tooltip-fijo{
+	  left:65%;
+	  bottom:36%;
+}
+.enero>.tooltip-fijo{
+	left: 0%; 
+	bottom: 12%;
+}
+.febrero>.tooltip-fijo{
+	left: 20%;
+    bottom: 12%;
+}
+.marzo>.tooltip-fijo{	
+	left: 44%; 
+	bottom: 17%;
+}
+.abril>.tooltip-fijo{	
+	left: 65%; 
+	bottom: 17%;
+}
+.mayo>.tooltip-fijo{	
+	left: 0%; 
+	bottom: -3%;
+}
+.junio>.tooltip-fijo{	
+	left: 20%; 
+	bottom: -3%;
+}
+  
+}
+
+@media screen and (max-width: 949px) {
+  /*.ast-header-break-point .ast-primary-header-bar {
+    border-bottom-color: pink;
+  }*/
+
+  div.uagb-tabs__wrap {
+    display: grid;
+  }
+
+  .calendario {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .blog .site-footer:before,
+  .archive .site-footer:before,
+  .error404 .site-footer:before {
+    height: 100px;
+  }
+
+  div.calendar-wrapper {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  div.uagb-tabs__wrap.uagb-tabs__vstyle6-mobile ul.uagb-tabs__panel .uagb-tab {
+    padding: 20px 0px;
+  }
+
+  .uagb-tabs__wrap .uagb-tabs__panel.uagb-tabs__align-left {
+    margin-right: 0;
+  }
+
+  div.uagb-tabs__wrap.uagb-tabs__vstyle6-mobile .uagb-tabs__body-wrap {
+    max-width: 100%;
+  }
+
+  div.wp-block-uagb-tabs.uagb-tabs__wrap.uagb-tabs__vstyle6-mobile
+    ul.uagb-tabs__panel {
+    min-width: 100%;
+    max-width: 100%;
+  }
+	.tooltip-fijo {
+    height: 12em;    
+}
+
+  .septiembre>.tooltip{
+	   left:0%;
+		bottom:41%;
+	}
+  .octubre>.tooltip-fijo{
+	   left:31%;
+	   bottom:45%;
+	}
+  .noviembre>.tooltip-fijo{
+	   left:62%;
+	   bottom:45%;
+	}
+  .diciembre>.tooltip-fijo{
+	  left:0%;
+	  bottom:29%;
+}
+.enero>.tooltip-fijo{
+	left: 31%; 
+	bottom: 26%;
+	height:17em;
+}
+.febrero>.tooltip-fijo{
+	left: 62%;
+    bottom: 29%;
+}
+.marzo>.tooltip-fijo{	
+	left: 0%; 
+	bottom: 14%;
+}
+.abril>.tooltip-fijo{	
+	left: 31%; 
+	bottom: 14%;
+}
+.mayo>.tooltip-fijo{	
+	left: 62%; 
+	bottom: 14%;
+}
+.junio>.tooltip-fijo{	
+	left: 0%; 
+	bottom: -2%;
+}
+
+  /*div.wp-block-uagb-table.uagb-tabs__wrap.uagb-tabs__vstyle6-mobile .uagb-tabs__body-wrap {    
+    max-width: 95%;
+}*/
+}
+
+@media screen and (min-width: 660px) and (max-width: 817px) {
+ .tooltip-fijo, tooltip-fijo{	   
+    width: 18em;
+	 height:14em; 
+	}
+	.mayo>.tooltip-fijo{	
+	left: 57%; 	
+}
+	.noviembre>.tooltip-fijo{
+	   left:57%;
+	  
+	}
+.febrero>.tooltip-fijo{
+	left: 57%;
+   
+}
+}
+
+@media screen and (max-width: 650px) {
+  /*.ast-header-break-point .ast-primary-header-bar {
+    border-bottom-color: red;
+  }*/
+
+  .calendario {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  div.calendar-wrapper {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ventana,
+  .tooltip {
+    left: -85px;
+    width: 200px;
+  }
+
+  .ventana:before,
+  .tooltip:after {
+    left: 90px;
+  }
+	
+  .septiembre>.tooltip{
+	   left:0%;
+		bottom:50%;
+	  width:18em;
+	}
+  .octubre>.tooltip-fijo{
+	   left:43%;
+	   bottom:50%;
+	}
+  .noviembre>.tooltip-fijo{
+	   left:0%;
+	   bottom:39%;
+	}
+  .diciembre>.tooltip-fijo{
+	  left:43%;
+	  bottom:39%;
+}
+.enero>.tooltip-fijo{
+	left: 0%; 
+	bottom: 23%;	
+}
+.febrero>.tooltip-fijo{
+	left: 43%;
+    bottom: 23%;
+}
+.marzo>.tooltip-fijo{	
+	left: 0%; 
+	bottom: 14%;
+}
+.abril>.tooltip-fijo{	
+	left: 43%; 
+	bottom: 14%;
+}
+.mayo>.tooltip-fijo{	
+	left: 0%; 
+	bottom: 0%;
+}
+.junio>.tooltip-fijo{	
+	left: 43%; 
+	bottom: 0%;
+}
+}
+
+@media screen and (min-width: 650px) and (max-width: 659px) {
+  .mensaje {
+    top: 41%;
+    left: -16%;
+    width: calc((100% - 10px) - 30px);
+  }
+}
+
+@media screen and (min-width: 551px) and (max-width: 650px) {
+  .mensaje {
+    top: 37%;
+    width: calc((100% - 10px) - 20px);
+  }
+}
+
+@media screen and (max-width: 550px) {
+  /*.ast-header-break-point .ast-primary-header-bar {
+    border-bottom-color: green;
+  }*/
+
+  .calendario {
+    grid-template-columns: 1fr;
+  }
+
+  div.calendar-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .ventana,
+  .tooltip {
+    left: -15px;
+    width: 200px;
+  }
+
+  .ventana:before,
+  .tooltip:after {
+    left: 20px;
+  }
+
+  .mensaje {
+    top: 26%;
+    left: -16%;
+    width: calc((100% - 1px) - 30px);
+  }
+	.tooltip,.tooltip-fijo{
+		width:27em;
+	}
+	  .septiembre>.tooltip{
+	   left:0%;
+		bottom:66%;	
+	}
+  .octubre>.tooltip-fijo{
+	   left:0%;
+	   bottom:61%;
+	}
+  .noviembre>.tooltip-fijo{
+	   left:0%;
+	   bottom:56%;
+	}
+  .diciembre>.tooltip-fijo{
+	  left:0%;
+	  bottom:46%;
+}
+.enero>.tooltip-fijo{
+	left: 0%; 
+	bottom: 36%;	
+}
+.febrero>.tooltip-fijo{
+	left: 0%;
+    bottom: 30%;
+}
+.marzo>.tooltip-fijo{	
+	left: 0%; 
+	bottom: 23%;
+}
+.abril>.tooltip-fijo{	
+	left: 0%; 
+	bottom: 16%;
+}
+.mayo>.tooltip-fijo{	
+	left: 0%; 
+	bottom: 8%;
+}
+.junio>.tooltip-fijo{	
+	left: 0%; 
+	bottom: 0%;
+}
+}
+
