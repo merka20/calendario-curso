@@ -762,18 +762,6 @@ $html= ob_get_clean();
   return $html;
 }
 }
-/*if (!function_exists('MK20_encolar_estilos_propios_calendar')) {
-
-	function MK20_encolar_estilos_propios_calendar()
-	{
-    global $post;
-    if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'calendario' ) ) {
-      wp_register_style( 'plugin-shortcode-css', plugin_dir_url( __FILE__ ) . 'admin/css/estilo_meses.css' );
-      wp_register_style('csspropio', plugin_dir_url( __FILE__ ) . 'admin/css/style.css');       
-    }
-}
-add_action( 'wp_enqueue_scripts', 'MK20_encolar_estilos_propios_calendar' );	
-}*/
 
 function MK20_encolar_estilos_propios_calendar() {
   global $post;
