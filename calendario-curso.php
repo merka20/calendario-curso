@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Calendario Curso by Merka20
+Plugin Name: Calendario Curso prueba y Merka20
 Plugin URI: https://merka20.com
 Description: Plugin que muestra un calendario con datos personalizados.
 Author: Oscar Domingo
@@ -28,101 +28,275 @@ register_activation_hook(__FILE__, 'MK20_Calendar_activate');
 register_deactivation_hook(__FILE__, 'MK20_Calendar_deactivate');
 
 
-// Hook para agregar una página de ajustes en el menú de administración
-add_action('admin_menu', 'my_calendar_plugin_add_admin_page');
-
-// Función para agregar la página de ajustes en el menú de administración
-function my_calendar_plugin_add_admin_page() {
+// Crea la página de ajustes
+function myplugin_create_settings_page() {
   add_options_page(
-    'Ajustes del Calendario',
-    'Calendario Plugin',
-    'manage_options',
-    'my-calendar-plugin',
-    'my_calendar_plugin_settings_page'
+      'Ajustes de Mi Plugin',
+      'Calendario Curso',
+      'manage_options',
+      'myplugin-settings',
+      'myplugin_render_settings_page'
   );
 }
+add_action('admin_menu', 'myplugin_create_settings_page');
 
-function my_calendar_plugin_register_settings() {
-    // Registra los campos de ajustes utilizando la función register_setting()
-   
-    register_setting('my-calendar-plugin-settings', 'end_date');
-    register_setting('my-calendar-plugin-settings', 'ini_enero');
-    register_setting('my-calendar-plugin-settings', 'ini_febrero');
-    register_setting('my-calendar-plugin-settings', 'ini_marzo');
-    register_setting('my-calendar-plugin-settings', 'ini_abril');
-    register_setting('my-calendar-plugin-settings', 'ini_mayo');
-    register_setting('my-calendar-plugin-settings', 'ini_junio');
-    register_setting('my-calendar-plugin-settings', 'ini_septiembre');
-    register_setting('my-calendar-plugin-settings', 'ini_octubre');
-    register_setting('my-calendar-plugin-settings', 'ini_noviembre');
-    register_setting('my-calendar-plugin-settings', 'ini_diciembre');
-  }
-  
-  // Hook para registrar los campos de ajustes
-  add_action('admin_init', 'my_calendar_plugin_register_settings');
-  
-  // Función para renderizar la página de ajustes de administración
-  function my_calendar_plugin_settings_page() {
-    ?>
-    <div class="wrap">
-      <h1>Ajustes del Calendario</h1>
+// Renderiza la página de ajustes
+function myplugin_render_settings_page() {
+  ?>
+  <div class="wrap">
+      <h1>Ajustes de Calendario Curso</h1>
       <form method="post" action="options.php">
-        <?php settings_fields('my-calendar-plugin-settings'); ?>
-        <?php do_settings_sections('my-calendar-plugin-settings'); ?>
-        
-        <h2>Configuración del Calendario</h2>
-        <table class="form-table">          
-          <tr>
-            <th scope="row">Año fin:</th>
-            <td><input type="text" name="end_date" value="<?php echo esc_attr(get_option('end_date')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio enero:</th>
-            <td><input type="text" name="ini_enero" value="<?php echo esc_attr(get_option('ini_enero')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio febrero:</th>
-            <td><input type="text" name="ini_febrero" value="<?php echo esc_attr(get_option('ini_febrero')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio marzo:</th>
-            <td><input type="text" name="ini_marzo" value="<?php echo esc_attr(get_option('ini_marzo')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio abril:</th>
-            <td><input type="text" name="ini_abril" value="<?php echo esc_attr(get_option('ini_abril')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio mayo:</th>
-            <td><input type="text" name="ini_mayo" value="<?php echo esc_attr(get_option('ini_mayo')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio junio:</th>
-            <td><input type="text" name="ini_junio" value="<?php echo esc_attr(get_option('ini_junio')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio septiembre:</th>
-            <td><input type="text" name="ini_septiembre" value="<?php echo esc_attr(get_option('ini_septiembre')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio octubre:</th>
-            <td><input type="text" name="ini_octubre" value="<?php echo esc_attr(get_option('ini_octubre')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio noviembre:</th>
-            <td><input type="text" name="ini_noviembre" value="<?php echo esc_attr(get_option('ini_noviembre')); ?>"></td>
-          </tr>
-          <tr>
-            <th scope="row">Día de inicio diciembre:</th>
-            <td><input type="text" name="ini_diciembre" value="<?php echo esc_attr(get_option('ini_diciembre')); ?>"></td>
-          </tr>
-        </table>
-        
-        <?php submit_button(); ?>
+          <?php
+          settings_fields('myplugin-settings-group');
+          do_settings_sections('myplugin-settings');
+          submit_button('Guardar ajustes');
+          ?>
       </form>
-    </div>
-    <?php
+  </div>
+  <?php
+}
+
+// Registra los campos de fecha y campos adicionales
+function myplugin_register_settings() {
+  register_setting(
+      'myplugin-settings-group',
+      'myplugin_start_date',
+      array(
+          'type' => 'string',
+          'sanitize_callback' => 'sanitize_text_field'
+      )
+  );
+
+  register_setting(
+      'myplugin-settings-group',
+      'myplugin_end_date',
+      array(
+          'type' => 'string',
+          'sanitize_callback' => 'sanitize_text_field'
+      )
+  );
+
+  register_setting(
+      'myplugin-settings-group',
+      'myplugin_holidays',
+      array(
+          'type' => 'string',
+          'sanitize_callback' => 'sanitize_textarea_field'
+      )
+  );
+
+  register_setting(
+      'myplugin-settings-group',
+      'myplugin_non_working_days',
+      array(
+          'type' => 'string',
+          'sanitize_callback' => 'sanitize_textarea_field'
+      )
+  );
+
+  register_setting(
+      'myplugin-settings-group',
+      'myplugin_infant_start_date',
+      array(
+          'type' => 'string',
+          'sanitize_callback' => 'sanitize_text_field'
+      )
+  );
+
+  register_setting(
+      'myplugin-settings-group',
+      'myplugin_infant_end_date',
+      array(
+          'type' => 'string',
+          'sanitize_callback' => 'sanitize_text_field'
+      )
+  );
+
+  register_setting(
+      'myplugin-settings-group',
+      'myplugin_secundary_start_date',
+      array(
+          'type' => 'string',
+          'sanitize_callback' => 'sanitize_text_field'
+      )
+  );
+
+  register_setting(
+      'myplugin-settings-group',
+      'myplugin_secundary_end_date',
+      array(
+          'type' => 'string',
+          'sanitize_callback' => 'sanitize_text_field'
+      )
+  );
+
+  add_settings_section(
+      'myplugin-settings-section',
+      'Configuración de fecha',
+      'myplugin_render_settings_section',
+      'myplugin-settings'
+  );
+
+  add_settings_field(
+      'myplugin-start-date',
+      'Fecha de inicio del curso',
+      'myplugin_render_start_date_field',
+      'myplugin-settings',
+      'myplugin-settings-section'
+  );
+
+  add_settings_field(
+      'myplugin-end-date',
+      'Fecha de fin del curso',
+      'myplugin_render_end_date_field',
+      'myplugin-settings',
+      'myplugin-settings-section'
+  );
+
+  add_settings_field(
+      'myplugin-holidays',
+      'Días festivos',
+      'myplugin_render_holidays_field',
+      'myplugin-settings',
+      'myplugin-settings-section'
+  );
+
+  add_settings_field(
+      'myplugin-non-working-days',
+      'Días no lectivos',
+      'myplugin_render_non_working_days_field',
+      'myplugin-settings',
+      'myplugin-settings-section'
+  );
+
+  add_settings_field(
+      'myplugin-infant-start-date',
+      'Fecha de inicio de Infantil',
+      'myplugin_render_infant_start_date_field',
+      'myplugin-settings',
+      'myplugin-settings-section'
+  );
+
+  add_settings_field(
+      'myplugin-infant-end-date',
+      'Fecha de fin de Infantil',
+      'myplugin_render_infant_end_date_field',
+      'myplugin-settings',
+      'myplugin-settings-section'
+  );
+
+  add_settings_field(
+      'myplugin-secundary-start-date',
+      'Fecha de inicio de Secundaria',
+      'myplugin_render_secundary_start_date_field',
+      'myplugin-settings',
+      'myplugin-settings-section'
+  );
+
+  add_settings_field(
+      'myplugin-secundary-end-date',
+      'Fecha de fin de Secundaria',
+      'myplugin_render_secundary_end_date_field',
+      'myplugin-settings',
+      'myplugin-settings-section'
+  );
+}
+add_action('admin_init', 'myplugin_register_settings');
+
+// Renderiza la sección de ajustes
+function myplugin_render_settings_section() {
+  echo '<p>Seleccione los campos necesarios en ajustes para crear el calendario:</p>';
+}
+
+// Renderiza el campo de fecha de inicio
+function myplugin_render_start_date_field() {
+  $start_date = get_option('myplugin_start_date');
+  ?>
+  <input type="date" name="myplugin_start_date" value="<?php echo esc_attr($start_date); ?>">
+  <?php
+}
+
+// Renderiza el campo de fecha de fin
+function myplugin_render_end_date_field() {
+  $end_date = get_option('myplugin_end_date');
+  ?>
+  <input type="date" name="myplugin_end_date" value="<?php echo esc_attr($end_date); ?>">
+  <?php
+}
+
+// Renderiza el campo de días festivos
+function myplugin_render_holidays_field() {
+  $holidays = get_option('myplugin_holidays');
+  ?>
+  <textarea name="myplugin_holidays" rows="4" cols="50"><?php echo esc_textarea($holidays); ?></textarea>
+  <p class="description">Ingrese los días festivos, separados por coma o salto de línea.</p>
+  <?php
+}
+
+// Renderiza el campo de días no lectivos
+function myplugin_render_non_working_days_field() {
+  $non_working_days = get_option('myplugin_non_working_days');
+  ?>
+  <textarea name="myplugin_non_working_days" rows="4" cols="50"><?php echo esc_textarea($non_working_days); ?></textarea>
+  <p class="description">Ingrese los días no lectivos, separados por coma o salto de línea.</p>
+  <?php
+}
+
+// Renderiza el campo de fecha de inicio de infantil
+function myplugin_render_infant_start_date_field() {
+  $infant_start_date = get_option('myplugin_infant_start_date');
+  ?>
+  <input type="date" name="myplugin_infant_start_date" value="<?php echo esc_attr($infant_start_date); ?>">
+  <?php
+}
+
+// Renderiza el campo de fecha de fin de infantil
+function myplugin_render_infant_end_date_field() {
+  $infant_end_date = get_option('myplugin_infant_end_date');
+  ?>
+  <input type="date" name="myplugin_infant_end_date" value="<?php echo esc_attr($infant_end_date); ?>">
+  <?php
+}
+
+// Renderiza el campo de fecha de inicio de secundaria
+function myplugin_render_secundary_start_date_field() {
+  $secundary_start_date = get_option('myplugin_secundary_start_date');
+  ?>
+  <input type="date" name="myplugin_secundary_start_date" value="<?php echo esc_attr($secundary_start_date); ?>">
+  <?php
+}
+
+// Renderiza el campo de fecha de fin de secundaria
+function myplugin_render_secundary_end_date_field() {
+  $secundary_end_date = get_option('myplugin_secundary_end_date');
+  ?>
+  <input type="date" name="myplugin_secundary_end_date" value="<?php echo esc_attr($secundary_end_date); ?>">
+  <?php
+}
+
+
+// Función para obtener los días de la semana de inicio de cada mes
+function obtener_dias_semana_inicio_mes($start_month, $start_year, $end_month, $end_year) {
+  $dias_semana = array();
+  
+  $fecha_inicio = new DateTime("{$start_year}-{$start_month}-01");
+  $fecha_fin = new DateTime("{$end_year}-{$end_month}-01");
+  
+  while ($fecha_inicio <= $fecha_fin) {
+      $anio = $fecha_inicio->format('Y');
+      $mes = $fecha_inicio->format('n');
+
+      $primer_dia = strtotime("{$anio}-{$mes}-01");
+      $dia_semana = date('N', $primer_dia);
+
+      $dias_semana[$mes] = $dia_semana;
+
+      $fecha_inicio->modify('+1 month');
   }
+  
+  return $dias_semana;
+}
+
 
 //Crear shortcode
 
@@ -134,26 +308,40 @@ if (!function_exists('MK20_registrar_shortcode')) {
 add_action('init','MK20_registrar_shortcode');
 }
 
+
 if (!function_exists('MK20_my_shortcode')) {
-  function MK20_my_shortcode($atts) {
+  function MK20_my_shortcode($atts) { 
  
-   // archivo1.php
-$año = get_option('end_date');
-$enero = get_option('ini_enero');
-$febrero = get_option('ini_febrero');
-$marzo = get_option('ini_marzo');
-$abril = get_option('ini_abril');
-$mayo = get_option('ini_mayo');
-$junio = get_option('ini_junio');
-$septiembre = get_option('ini_septiembre');
-$octubre = get_option('ini_octubre');
-$noviembre = get_option('ini_noviembre');
-$diciembre = get_option('ini_diciembre');
+    $start_date = get_option('myplugin_start_date');
+    $end_date = get_option('myplugin_end_date');
+    $start_month = date('m', strtotime($start_date));
+    $start_year = date('Y', strtotime($start_date));
+    $end_month = date('m', strtotime($end_date));
+    $end_year = date('Y', strtotime($end_date));
+    
+    $dias_semana = obtener_dias_semana_inicio_mes($start_month, $start_year, $end_month, $end_year);
+    
+
+$enero = $dias_semana[1];
+$febrero = $dias_semana[2];
+$marzo = $dias_semana[3];
+$abril = $dias_semana[4];
+$mayo = $dias_semana[5];
+$junio = $dias_semana[6];
+$septiembre = $dias_semana[9];
+$octubre = $dias_semana[10];
+$noviembre = $dias_semana[11];
+$diciembre = $dias_semana[12];
+
+// Obtener el valor de la fecha guardada en la variable $infant_end_date
+/*$infant_end_date = get_option('myplugin_infant_end_date');
+   // Convertir la fecha en un objeto de fecha de JavaScript
+   $infant_end_date_js = date('Y/m/d', strtotime($infant_end_date));*/
 
 // Generar el contenido CSS
 $css_content = "        
     .hoja.enero li.first-day {
-      grid-column-start: ". $enero .";/*colocamos el numero desde donde queremos que empiece el mes 7 es domingo*/
+      grid-column-start:". $enero .";/*colocamos el numero desde donde queremos que empiece el mes 7 es domingo*/
     }.hoja.enero li.dia:nth-child(7n+" . (7 - $enero) . ")  {	
       background-color: var(--finde);
       color: white;
@@ -219,7 +407,7 @@ $css_content = "
     .hoja.junio li.dia:nth-child(7n+" . (1 + (7 - $junio)) . ") {	
       background-color: var(--finde);
       color: white;
-    }
+    }   
     
     .hoja.julio li.first-day {
       grid-column-start: 1;
@@ -291,7 +479,7 @@ $css_content = "
     .hoja.diciembre li.dia:nth-child(7n+" . (1 + (7 - $diciembre)) . ") {	
       background-color: var(--finde);
       color: white;
-    }";   
+    }";  
     
 // Obtener la ruta absoluta de la carpeta del plugin
 $plugin_dir = plugin_dir_path(__FILE__);
@@ -300,485 +488,244 @@ $plugin_dir = plugin_dir_path(__FILE__);
 $css_file = $plugin_dir . 'admin/css/estilo_meses.css';
 
 // Guardar el contenido CSS en el archivo
-file_put_contents($css_file, $css_content); 
+file_put_contents($css_file, $css_content);  
 
    ob_start();
-   ?>
-<div class="calendar-wrapper">
-<div class="hoja septiembre">
-      <h2>Septiembre</h2>
-        <ul class="calendar">
-          <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day dia">1</li>
-          <li class="dia">2</li>
-          <li class="dia">3</li>
-          <li class="dia">4</li>
-          <li class="dia">5</li>
-          <li class="dia">6</li>
-          <li class="inicioi dia"><span class="numero">7</span><div class="ventana"><h4>Inicio clases</h4><p class="nota">Fecha de comienzo de las clases de Secundaria: JUEVES 7 SEPT.</p></div></li>
-          <li class="inicios dia"><span class="numero">8</span><div class="ventana"><h4>Inicio clases</h4><p class="nota">Fecha de comienzo de las clases de Infantil y primaria: VIERNES 8 SEPT.</p></div></li>
-          <li class="dia">9</li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="dia">12</li>
-          <li class="dia">13</li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="dia">17</li>
-          <li class="dia">18</li>
-          <li class="dia">19</li>
-          <li class="dia">20</li>
-          <li class="dia">21</li>
-          <li class="dia">22</li>
-          <li class="dia">23</li>
-          <li class="dia">24</li>
-          <li class="dia">25</li>
-          <li class="dia">26</li>
-          <li class="dia">27</li>
-          <li class="dia">28</li>
-          <li class="dia">29</li>
-          <li class="dia">30</li>    
-        </ul>
-      </div>
-      <div class="hoja octubre">
-      <h2>Octubre</h2>
-        <ul class="calendar">
-          <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day dia">1</li>
-          <li class="dia">2</li>
-          <li class="dia">3</li>
-          <li class="dia">4</li>
-          <li class="dia">5</li>
-          <li class="dia">6</li>
-          <li class="dia">7</li>
-          <li class="dia">8</li>
-          <li class="dia">9</li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="fiesta dia">12</li>
-          <li class="no-lectivo dia"><span class="numero">13</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="dia">17</li>
-          <li class="dia">18</li>
-          <li class="dia">19</li>
-          <li class="dia">20</li>
-          <li class="no-lectivo dia"><span class="numero">21</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>
-          <li class="dia">22</li>
-          <li class="dia">23</li>
-          <li class="dia">24</li>
-          <li class="dia">25</li>
-          <li class="dia">26</li>
-          <li class="dia">27</li>
-          <li class="dia">28</li>
-          <li class="dia">29</li>
-          <li class="dia">30</li>
-          <li class="dia">31</li>
-        </ul>
-      </div>
-      <div class="hoja noviembre">
-      <h2>Noviembre</h2>
-        <ul class="calendar">
-          <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day fiesta dia">1</li>
-          <li class="dia">2</li>
-          <li class="dia">3</li>
-          <li class="dia">4</li>
-          <li class="dia">5</li>
-          <li class="dia">6</li>
-          <li class="dia">7</li>
-          <li class="dia">8</li>
-          <li class="dia">9</li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="dia">12</li>
-          <li class="dia">13</li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="dia">17</li>
-          <li class="dia">18</li>
-          <li class="dia">19</li>
-          <li class="dia">20</li>
-          <li class="dia">21</li>
-          <li class="dia">22</li>
-          <li class="dia">23</li>
-          <li class="dia">24</li>
-          <li class="dia">25</li>
-          <li class="dia">26</li>
-          <li class="dia">27</li>
-          <li class="dia">28</li>
-          <li class="no-lectivo dia"><span class="numero">29</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota">Fecha Patrón Localidad: Lunes 29 NOVIEMBRE</p></div></li>
-          <li class="dia">30</li>    
-        </ul>
-      </div>
-      <div class="hoja diciembre">
-      <h2>Diciembre</h2>
-        <ul class="calendar">
-          <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day dia">1</li>
-          <li class="dia">2</li>
-          <li class="dia">3</li>
-          <li class="fiesta dia">4</li>
-          <li class="no-lectivo dia"><span class="numero">5</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>
-          <li class="fiesta dia">6</li>
-          <li class="dia">7</li>
-          <li class="fiesta dia">8</li>
-          <li class="dia">9</li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="dia">12</li>
-          <li class="dia">13</li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="dia">17</li>
-          <li class="dia">18</li>
-          <li class="dia">19</li>
-          <li class="dia">20</li>
-          <li class="dia">21</li>
-          <li class="dia">22</li>
-          <li class="fiesta dia ">23</li>
-          <li class="fiesta dia">24</li>
-          <li class="fiesta dia">25</li>
-          <li class="fiesta dia">26</li>
-          <li class="fiesta dia">27</li>
-          <li class="fiesta dia">28</li>
-          <li class="fiesta dia">29</li>
-          <li class="fiesta dia">30</li>
-          <li class="fiesta dia">31</li>
-        </ul>
-      </div>
-      <div class="hoja enero">
-      <h2>Enero</h2>
-        <ul class="calendar">
-          <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day fiesta dia">1</li>
-          <li class="fiesta dia">2</li>
-          <li class="fiesta dia">3</li>
-          <li class="fiesta dia">4</li>
-          <li class="fiesta dia">5</li>
-          <li class="fiesta dia">6</li>
-          <li class="dia">7</li>
-          <li class="dia">8</li>
-          <li class="dia">9</li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="dia">12</li>
-          <li class="dia">13</li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="dia">17</li>
-          <li class="dia">18</li>
-          <li class="dia">19</li>
-          <li class="dia">20</li>
-          <li class="dia">21</li>
-          <li class="dia">22</li>
-          <li class="dia">23</li>
-          <li class="dia">24</li>
-          <li class="dia">25</li>
-          <li class="dia">26</li>
-          <li class="dia">27</li>
-          <li class="dia">28</li>
-          <li class="dia">29</li>
-          <li class="dia">30</li>
-          <li class="dia">31</li>
-        </ul>
-      </div>
-      <div class="hoja febrero">
-      <h2>Febrero</h2>
-        <ul id="año" class="calendar">
-          <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day dia">1</li>
-          <li class="dia">2</li>
-          <li class="dia">3</li>
-          <li class="dia">4</li>
-          <li class="dia">5</li>
-          <li class="dia">6</li>
-          <li class="dia">7</li>
-          <li class="dia">8</li>
-          <li class="no-lectivo dia"><span class="numero">9</span><div class="ventana"><h4>Fechas no lectivas</h4></div></li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="no-lectivo dia"><span class="numero">12</span><div class="ventana"><h4>Fechas no lectivas</h4></div></li>
-          <li class="dia">13</li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="dia">17</li>
-          <li class="dia">18</li>
-          <li class="dia">19</li>
-          <li class="dia">20</li>
-          <li class="dia">21</li>
-          <li class="dia">22</li>
-          <li class="dia">23</li>
-          <li class="dia">24</li>
-          <li class="dia">25</li>
-          <li class="dia">26</li>
-          <li class="dia">27</li>
-          <li class="dia">28</li>
-          <?php
 
-          if (!function_exists('esBisiesto')) {
-            function esBisiesto($year) {
-                if (($year % 4 == 0 && $year % 100 != 0) || $year % 400 == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+// Definir array de nombres de los meses en español
+$meses = array(
+  9 => 'septiembre',
+  10 => 'octubre',
+  11 => 'noviembre',
+  12 => 'diciembre',
+  1 => 'enero',
+  2 => 'febrero',
+  3 => 'marzo',
+  4 => 'abril',
+  5 => 'mayo',
+  6 => 'junio'
+);
+
+$posicion = array_search('septiembre', $meses);
+
+
+// Obtener las fechas almacenadas en get_option
+$fecha_inicio_primaria = get_option('myplugin_infant_start_date');
+$fecha_fin_primaria = get_option('myplugin_infant_end_date');
+$fecha_inicio_secundaria = get_option('myplugin_secundary_start_date');
+$fecha_fin_secundaria = get_option('myplugin_secundary_end_date');
+$dias_festivos = get_option('myplugin_holidays');
+
+
+// Convertir las fechas en objetos de tipo DateTime
+$fecha_inicio_primaria_objeto = new DateTime($fecha_inicio_primaria);
+$fecha_fin_primaria_objeto = new DateTime($fecha_fin_primaria);
+$fecha_inicio_secundaria_objeto = new DateTime($fecha_inicio_secundaria);
+$fecha_fin_secundaria_objeto = new DateTime($fecha_fin_secundaria);
+
+
+// Obtener los números de mes y días utilizando la función date()
+$mes_numero_inicio_primaria = $fecha_inicio_primaria_objeto->format('m');
+$dia_inicio_primaria = $fecha_inicio_primaria_objeto->format('d');
+$mes_numero_fin_primaria = $fecha_fin_primaria_objeto->format('m');
+$dia_fin_primaria = $fecha_fin_primaria_objeto->format('d');
+$mes_numero_inicio_secundaria = $fecha_inicio_secundaria_objeto->format('m');
+$dia_inicio_secundaria = $fecha_inicio_secundaria_objeto->format('d');
+$mes_numero_fin_secundaria = $fecha_fin_secundaria_objeto->format('m');
+$dia_fin_secundaria = $fecha_fin_secundaria_objeto->format('d');
+
+
+
+// Obtener los nombres de los meses en español desde el array
+$mes_nombre_inicio_primaria = $meses[(int)$mes_numero_inicio_primaria];
+$mes_nombre_fin_primaria = $meses[(int)$mes_numero_fin_primaria];
+$mes_nombre_inicio_secundaria = $meses[(int)$mes_numero_inicio_secundaria];
+$mes_nombre_fin_secundaria = $meses[(int)$mes_numero_fin_secundaria];
+
+
+
+// Formatear los valores de los días
+$dia_formateado_inicio_primaria = ltrim($dia_inicio_primaria, '0');
+$dia_formateado_fin_primaria = ltrim($dia_fin_primaria, '0');
+$dia_formateado_inicio_secundaria = ltrim($dia_inicio_secundaria, '0');
+$dia_formateado_fin_secundaria = ltrim($dia_fin_secundaria, '0');
+
+
+$datos_fechas = explode('/', $dias_festivos);
+$dia_fecha = intval($datos_fechas[0]);
+$mes_fecha = intval($datos_fechas[1]);
+$anio_fecha = intval($datos_fechas[2]);
+
+$mes_nombre = $meses[$mes_fecha];
+
+//echo $dia_fecha . '/' . $mes_nombre . '/' . $anio_fecha; // Imprime la fecha en formato "día/mes/año"
+
+echo '<div class="calendar-wrapper">';
+
+$start_date = get_option('myplugin_start_date'); // Obtener la fecha de inicio desde la opción de WordPress
+$mesNumero = date('n', strtotime($start_date)); // Obtener el número de mes de la fecha de inicio
+
+// Encontrar la posición del mes de inicio en el array $meses
+$posicion = array_search($meses[$mesNumero], $meses);
+
+// Recorrer los meses a partir de la posición encontrada
+for ($i = $posicion; $i < $posicion + 10; $i++) {
+  $mesNumero = ($i > 12) ? $i - 12 : $i;
+  $mesNombre = $meses[$mesNumero];
+  $anio = ($i > 12) ? intval(date('Y', strtotime($start_date))) + 1 : intval(date('Y', strtotime($start_date)));
+
+  // Obtener el número de días del mes
+  $diasMes = cal_days_in_month(CAL_GREGORIAN, $mesNumero, $anio);
+
+  
+  
+  echo '<div class="hoja ' . $mesNombre . '"><h2>' . $mesNombre . '</h2>';
+  echo '<ul class="calendar">';
+  echo '<li class="weekday">L</li>
+  <li class="weekday">M</li>
+  <li class="weekday">X</li>
+  <li class="weekday">J</li>
+  <li class="weekday">V</li>
+  <li class="weekday">S</li>
+  <li class="weekday">D</li>';
+
+
+  for ($dia = 1; $dia <= $diasMes; $dia++) {   
+    $dias_festivos = get_option('myplugin_holidays');
+    $festivos_array = preg_split('/\s*,\s*/', $dias_festivos);    
+    $dias_no_lectivos = get_option('myplugin_non_working_days');
+    $no_lectivos_array = preg_split('/\s*,\s*/', $dias_no_lectivos);  
+    
+    $festivos = array(); // Array para almacenar los días festivos
+    $no_lectivos = array(); // Array para almacenar los días festivos
+    
+    $meses = array(
+      9 => 'septiembre',
+      10 => 'octubre',
+      11 => 'noviembre',
+      12 => 'diciembre',
+      1 => 'enero',
+      2 => 'febrero',
+      3 => 'marzo',
+      4 => 'abril',
+      5 => 'mayo',
+      6 => 'junio'
+    );
+    
+    foreach ($festivos_array as $festivo) {
+        $fechas = explode("\n", $festivo); // Dividir las fechas por saltos de línea (si es necesario)
+    
+        foreach ($fechas as $fecha) {
+            $datos_fecha = explode('/', $fecha);
+            if (count($datos_fecha) === 3) {
+                $dia_festivo = intval($datos_fecha[0]);
+                $mes_festivo = intval($datos_fecha[1]);
+                $anio_festivo = intval($datos_fecha[2]);
+                
+                // Verificar si la clave del mes existe en el array $meses
+            if (array_key_exists($mes_festivo, $meses)) {
+              // Obtener el nombre del mes desde el array $meses
+              $nombre_mes = $meses[$mes_festivo];
+
+              // Formatear la fecha en el formato "día/mes" y agregarla al array de días festivos
+              $festivos[] = $dia_festivo . '/' . $nombre_mes;
+          }
             }
-          }
+        }
+    }
 
-          // Ejemplo de uso
-          if (esBisiesto($year)) {
-            echo '<li class="bisiesto dia">29</li>';
+      $fechas_no_lectivas = array(); // Array para almacenar las fechas no lectivas formateadas
+
+      foreach ($no_lectivos_array as $fechas_no_lectivas) {
+          $fechas_no_lectivas = explode("\n", $fechas_no_lectivas); // Dividir las fechas por saltos de línea (si es necesario)
+
+          foreach ($fechas_no_lectivas as $fecha_no_lectiva) {
+              $datos_fecha_no_lectiva = explode('/', $fecha_no_lectiva);
+              if (count($datos_fecha_no_lectiva) === 3) {
+                  $dia_nl = intval($datos_fecha_no_lectiva[0]);
+                  $mes_nl = intval($datos_fecha_no_lectiva[1]);
+                  $anio_nl = intval($datos_fecha_no_lectiva[2]);
+
+                  // Obtener el nombre del mes desde el array $meses (opcional)
+                  $nombre_mes_nl = $meses[$mes_nl] ?? '';
+
+                  // Formatear la fecha en el formato "día/mes" y agregarla al array de fechas no lectivas
+                  $fechas_no_lectivas[] = $dia_nl . '/' . $nombre_mes_nl;
+              }
           }
-        ?>    
-         </ul>
-      </div>
-      <div class="hoja marzo">
-      <h2>Marzo</h2>
-        <ul class="calendar">
-          <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day dia">1</li>
-          <li class="dia">2</li>
-          <li class="dia">3</li>
-          <li class="dia">4</li>
-          <li class="dia">5</li>
-          <li class="dia">6</li>
-          <li class="dia">7</li>
-          <li class="dia">8</li>
-          <li class="dia">9</li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="dia">12</li>
-          <li class="dia">13</li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="no-lectivo dia"><span class="numero">17</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>
-          <li class="dia">18</li>
-          <li class="dia">19</li>
-          <li class="dia">20</li>
-          <li class="dia">21</li>
-          <li class="dia">22</li>
-          <li class="dia">23</li>
-          <li class="dia">24</li>
-          <li class="dia">25</li>
-          <li class="dia">26</li>
-          <li class="dia">27</li>
-          <li class="fiesta dia">28</li>  
-          <li class="fiesta dia">29</li>
-          <li class="dia">30</li>
-          <li class="dia">31</li>  
-        </ul>
-      </div>
-      <div class="hoja abril">
-      <h2>Abril</h2>
-        <ul class="calendar">
-          <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day fiesta dia">1</li>
-          <li class="fiesta dia">2</li>
-          <li class="fiesta dia">3</li>
-          <li class="fiesta dia">4</li>
-          <li class="fiesta dia">5</li>
-          <li class="dia">6</li>
-          <li class="dia">7</li>
-          <li class="dia">8</li>
-          <li class="dia">9</li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="dia">12</li>
-          <li class="dia">13</li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="dia">17</li>
-          <li class="dia">18</li>
-          <li class="dia">19</li>
-          <li class="dia">20</li>
-          <li class="dia">21</li>
-          <li class="dia">22</li>
-          <li class="dia">23</li>
-          <li class="dia">24</li>
-          <li class="dia">25</li>
-          <li class="dia">26</li>
-          <li class="dia">27</li>
-          <li class="dia">28</li>
-          <li class="dia">29</li>
-          <li class="dia">30</li>    
-        </ul>
-      </div>
-      <div class="hoja mayo">
-      <h2>Mayo</h2>
-        <ul class="calendar">
-         <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day fiesta dia">1</li>
-          <li class="no-lectivo dia"><span class="numero">2</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>
-          <li class="no-lectivo dia"><span class="numero">3</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>
-          <li class="dia">4</li>
-          <li class="dia">5</li>
-          <li class="dia">6</li>
-          <li class="dia">7</li>
-          <li class="dia">8</li>
-          <li class="dia">9</li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="dia">12</li>
-          <li class="dia">13</li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="dia">17</li>
-          <li class="dia">18</li>
-          <li class="dia">19</li>
-          <li class="dia">20</li>
-          <li class="dia">21</li>
-          <li class="dia">22</li>
-          <li class="dia">23</li>
-          <li class="dia">24</li>
-          <li class="dia">25</li>
-          <li class="dia">26</li>
-          <li class="dia">27</li>
-          <li class="dia">28</li>
-          <li class="dia">29</li>
-          <li class="dia">30</li>
-          <li class="dia">31</li>
-        </ul>
-      </div>
-      <div class="hoja junio">
-      <h2>Junio</h2>
-        <ul class="calendar">
-          <li class="weekday">L</li>
-          <li class="weekday">M</li>
-          <li class="weekday">X</li>
-          <li class="weekday">J</li>
-          <li class="weekday">V</li>
-          <li class="weekday">S</li>
-          <li class="weekday">D</li>
-          
-          <li class="first-day dia">1</li>
-          <li class="dia">2</li>
-          <li class="dia">3</li>
-          <li class="dia">4</li>
-          <li class="dia">5</li>
-          <li class="dia">6</li>
-          <li class="dia">7</li>
-          <li class="dia">8</li>
-          <li class="dia">9</li>
-          <li class="dia">10</li>
-          <li class="dia">11</li>
-          <li class="dia">12</li>
-          <li class="dia">13</li>
-          <li class="dia">14</li>
-          <li class="dia">15</li>
-          <li class="dia">16</li>
-          <li class="dia">17</li>
-          <li class="dia">18</li>
-          <li id="final" class="fini dia"><span class="numero">19</span><div class="ventana"><h4>Fin de curso</h4><p class="nota">Fecha de finalización de las clases de Secundaria MIÉRCOLES 19 JUNIO</p></div></li>
-          <li class="fins dia"><span class="numero">20</span><div class="ventana"><h4>Fin de curso</h4><p class="nota">Fecha de finalización de las clases de Infantil y primaria JUEVES 20 JUNIO</p></div></li>
-          <li class="dia">21</li>
-          <li class="dia">22</li>
-          <li class="dia">23</li>
-          <li class="dia">24</li>
-          <li class="dia">25</li>
-          <li class="dia">26</li>
-          <li class="dia">27</li>
-          <li class="dia">28</li>
-          <li class="dia">29</li>
-          <li class="dia">30</li>    
-        </ul>
-      </div>
-      </div>    
-<?php 
-$html= ob_get_clean();
-// Devolver el texto almacenado
-  return $html;
+      }
+
+ 
+        
+
+    // Verificar si el valor actual es igual a 20
+    if ($dia == $dia_formateado_inicio_primaria && $mesNombre == 'septiembre') {         
+      echo '<li class="dia inicios"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Secundaria: JUEVES '. $dia .' SEPT.</p></div></li>';
+    } elseif ($dia == 1 && in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
+      echo '<li class="no-lectivo dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
+    } elseif ($dia == 1 && in_array($dia . '/' . $mesNombre, $festivos)){
+      echo '<li class="first-day fiesta dia">' . $dia . '</li>';
+    } elseif ($dia == 1){
+      echo '<li class="first-day dia">' . $dia . '</li>';
+    } elseif ($dia == $dia_formateado_fin_primaria && $mesNombre == 'junio'){
+      echo '<li class="dia fins"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria MIÉRCOLES ' . $dia . ' JUNIO</p></div></li>';
+    } elseif ($dia == $dia_formateado_inicio_secundaria && $mesNombre == 'septiembre'){
+      echo '<li class="dia inicioi"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Infantil y primaria: VIERNES' . $dia . 'SEPT.</p></div></li>';
+    } elseif ($dia == $dia_formateado_fin_secundaria && $mesNombre == 'junio'){
+      echo '<li id="final" class="fini dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria JUEVES ' . $dia . ' JUNIO</p></div></li>';                  
+    } elseif (in_array($dia . '/' . $mesNombre, $festivos)) {
+      echo '<li class="fiesta dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria JUEVES ' . $dia . ' JUNIO</p></div></li>';
+    } elseif ($dia == 29 && in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
+      echo '<li class="no-lectivo dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota">Fecha Patrón Localidad: Lunes ' . $dia . ' NOVIEMBRE</p></div></li>';
+    } elseif (in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
+      echo '<li class="no-lectivo dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
+    }
+    else {
+      echo '<li class="dia">' . $dia . '</li>';
+    } 
+
+  }
+  echo '</ul>';
+  echo '</div>';   
+  
+}
+echo '</div>';
+
+$html = ob_get_clean();
+return $html;          
 }
 }
 
+
+
+
+
+
+  
+
+
+ 
+//Encolar estilos propios
 function MK20_encolar_estilos_propios_calendar() {
   global $post;
 
   if ( is_a( $post, 'WP_Post' ) ) {
-      $has_shortcode = has_shortcode( $post->post_content, 'calendario' );
+    $has_shortcode = has_shortcode( $post->post_content, 'calendario' );
 
-      if ( $has_shortcode ) {
-          wp_register_style( 'plugin-shortcode-css', plugin_dir_url( __FILE__ ) . 'admin/css/estilo_meses.css' );
-          wp_register_style( 'csspropio', plugin_dir_url( __FILE__ ) . 'admin/css/style.css' );
+    if ( $has_shortcode ) {
+      wp_register_style( 'plugin-shortcode-css', plugin_dir_url( __FILE__ ) . 'admin/css/estilo_meses.css' );
+      wp_register_style( 'csspropio', plugin_dir_url( __FILE__ ) . 'admin/css/style.css' );
 
-          wp_enqueue_style( 'plugin-shortcode-css' );
-          wp_enqueue_style( 'csspropio' );          
-      } 
+      wp_enqueue_style( 'plugin-shortcode-css' );
+      wp_enqueue_style( 'csspropio' );
+
+      // Enqueue del archivo JavaScript "cambio-clase.js"
+      //wp_enqueue_script( 'cambio-clase', plugin_dir_url( __FILE__ ) . 'inc/js/cambio-clase.js', array( 'jquery' ), '1.0', true );
+    }
   }
 }
 add_action( 'wp_enqueue_scripts', 'MK20_encolar_estilos_propios_calendar' );
+
 
 
 //Load texdomain
@@ -789,5 +736,5 @@ if (!function_exists('MK20_load_plugin_textdomain_calendar')) {
 	{
 		load_plugin_textdomain('MK20-Calendario', FALSE, plugin_basename(dirname(__FILE__)) . '/languages/');
 	}
-	add_action('plugins_loaded', 'Mk20_load_plugin_textdomain_calendar');
-} 
+	add_action('plugins_loaded', 'Mk20_load_plugin_textdomain_calendar');  
+}  

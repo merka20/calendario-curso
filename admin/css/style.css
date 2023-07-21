@@ -14,6 +14,11 @@
 	--finde:red;
 }
 
+.entry-content ul, .entry-content ol {
+  padding: inherit;
+  margin: inherit;
+}
+
 /*Calendario curso*/
 
 .calendar-wrapper {

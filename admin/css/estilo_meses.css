@@ -1,0 +1,141 @@
+        
+    .hoja.enero li.first-day {
+      grid-column-start:1;/*colocamos el numero desde donde queremos que empiece el mes 7 es domingo*/
+    }.hoja.enero li.dia:nth-child(7n+6)  {	
+      background-color: var(--finde);
+      color: white;
+    }.hoja.enero li.dia:nth-child(7n+7)  {	
+      background-color: var(--finde);
+      color: white;
+    }     
+    .hoja.febrero li.first-day {
+      grid-column-start: 4;
+    }
+    .hoja.febrero li.dia:nth-child(7n+3) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.febrero li.dia:nth-child(7n+4) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    
+    .hoja.marzo li.first-day {
+      grid-column-start: 5;
+    }
+    .hoja.marzo li.dia:nth-child(7n+2) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.marzo li.dia:nth-child(7n+3) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    
+    .hoja.abril li.first-day {
+      grid-column-start: 1;
+    }
+    .hoja.abril li.dia:nth-child(7n+6) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.abril li.dia:nth-child(7n+7) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    
+    .hoja.mayo li.first-day {
+      grid-column-start: 3;
+    }
+    .hoja.mayo li.dia:nth-child(7n+4) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.mayo li.dia:nth-child(7n+5) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    
+    .hoja.junio li.first-day {
+      grid-column-start: 6;
+    }
+    .hoja.junio li.dia:nth-child(7n+1) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.junio li.dia:nth-child(7n+2) {	
+      background-color: var(--finde);
+      color: white;
+    }   
+    
+    .hoja.julio li.first-day {
+      grid-column-start: 1;
+    }
+    /*.hoja.julio li.dia:nth-child(7n+7) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.julio li.dia:nth-child(7n+0) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    
+    .hoja.agosto li.first-day {
+      grid-column-start: 3;
+    }
+    .hoja.agosto li.dia:nth-child(7n+2) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.agosto li.dia:nth-child(7n+3) {	
+      background-color: var(--finde);
+      color: white;
+    }*/
+    
+    .hoja.septiembre li.first-day {
+      grid-column-start: 5;
+    }
+    .hoja.septiembre li.dia:nth-child(7n+2) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.septiembre li.dia:nth-child(7n+3) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    
+    .hoja.octubre li.first-day {
+      grid-column-start: 7;
+    }
+    .hoja.octubre li.dia:nth-child(7n+0) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.octubre li.dia:nth-child(7n+1) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    
+    .hoja.noviembre li.first-day {
+      grid-column-start: 3;
+    }
+    .hoja.noviembre li.dia:nth-child(7n+4) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.noviembre li.dia:nth-child(7n+5) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    
+    .hoja.diciembre li.first-day {
+      grid-column-start: 5;
+    }
+    .hoja.diciembre li.dia:nth-child(7n+2) {	
+      background-color: var(--finde);
+      color: white;
+    }
+    .hoja.diciembre li.dia:nth-child(7n+3) {	
+      background-color: var(--finde);
+      color: white;
+    }
