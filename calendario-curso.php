@@ -29,19 +29,19 @@ register_deactivation_hook(__FILE__, 'MK20_Calendar_deactivate');
 
 
 // Crea la página de ajustes
-function myplugin_create_settings_page() {
+function MK20_Calendar_myplugin_create_settings_page() {
   add_options_page(
       'Ajustes de Mi Plugin',
       'Calendario Curso',
       'manage_options',
       'myplugin-settings',
-      'myplugin_render_settings_page'
+      'MK20_Calendar_myplugin_render_settings_page'
   );
 }
-add_action('admin_menu', 'myplugin_create_settings_page');
+add_action('admin_menu', 'MK20_Calendar_myplugin_create_settings_page');
 
 // Renderiza la página de ajustes
-function myplugin_render_settings_page() {
+function MK20_Calendar_myplugin_render_settings_page() {
   ?>
   <div class="wrap">
       <h1>Ajustes de Calendario Curso</h1>
@@ -57,7 +57,7 @@ function myplugin_render_settings_page() {
 }
 
 // Registra los campos de fecha y campos adicionales
-function myplugin_register_settings() {
+function MK20_Calendar_myplugin_register_settings() {
   register_setting(
       'myplugin-settings-group',
       'myplugin_start_date',
@@ -133,14 +133,14 @@ function myplugin_register_settings() {
   add_settings_section(
       'myplugin-settings-section',
       'Configuración de fecha',
-      'myplugin_render_settings_section',
+      'MK20_Calendar_myplugin_render_settings_section',
       'myplugin-settings'
   );
 
   add_settings_field(
       'myplugin-start-date',
       'Fecha de inicio del curso',
-      'myplugin_render_start_date_field',
+      'MK20_Calendar_myplugin_render_start_date_field',
       'myplugin-settings',
       'myplugin-settings-section'
   );
@@ -148,7 +148,7 @@ function myplugin_register_settings() {
   add_settings_field(
       'myplugin-end-date',
       'Fecha de fin del curso',
-      'myplugin_render_end_date_field',
+      'MK20_Calendar_myplugin_render_end_date_field',
       'myplugin-settings',
       'myplugin-settings-section'
   );
@@ -156,7 +156,7 @@ function myplugin_register_settings() {
   add_settings_field(
       'myplugin-holidays',
       'Días festivos',
-      'myplugin_render_holidays_field',
+      'MK20_Calendar_myplugin_render_holidays_field',
       'myplugin-settings',
       'myplugin-settings-section'
   );
@@ -164,7 +164,7 @@ function myplugin_register_settings() {
   add_settings_field(
       'myplugin-non-working-days',
       'Días no lectivos',
-      'myplugin_render_non_working_days_field',
+      'MK20_Calendar_myplugin_render_non_working_days_field',
       'myplugin-settings',
       'myplugin-settings-section'
   );
@@ -172,7 +172,7 @@ function myplugin_register_settings() {
   add_settings_field(
       'myplugin-infant-start-date',
       'Fecha de inicio de Infantil',
-      'myplugin_render_infant_start_date_field',
+      'MK20_Calendar_myplugin_render_infant_start_date_field',
       'myplugin-settings',
       'myplugin-settings-section'
   );
@@ -180,7 +180,7 @@ function myplugin_register_settings() {
   add_settings_field(
       'myplugin-infant-end-date',
       'Fecha de fin de Infantil',
-      'myplugin_render_infant_end_date_field',
+      'MK20_Calendar_myplugin_render_infant_end_date_field',
       'myplugin-settings',
       'myplugin-settings-section'
   );
@@ -188,7 +188,7 @@ function myplugin_register_settings() {
   add_settings_field(
       'myplugin-secundary-start-date',
       'Fecha de inicio de Secundaria',
-      'myplugin_render_secundary_start_date_field',
+      'MK20_Calendar_myplugin_render_secundary_start_date_field',
       'myplugin-settings',
       'myplugin-settings-section'
   );
@@ -196,20 +196,22 @@ function myplugin_register_settings() {
   add_settings_field(
       'myplugin-secundary-end-date',
       'Fecha de fin de Secundaria',
-      'myplugin_render_secundary_end_date_field',
+      'MK20_Calendar_myplugin_render_secundary_end_date_field',
       'myplugin-settings',
       'myplugin-settings-section'
   );
 }
-add_action('admin_init', 'myplugin_register_settings');
+add_action('admin_init', 'MK20_Calendar_myplugin_register_settings');
 
 // Renderiza la sección de ajustes
-function myplugin_render_settings_section() {
+function MK20_Calendar_myplugin_render_settings_section() {
   echo '<p>Seleccione los campos necesarios en ajustes para crear el calendario:</p>';
+  echo '<p>' . esc_html_e("Para poder asignar el calendario en las páginas hay que añadir el shortcode [calendario].", "MK20-Calendario") . '</p>';
+
 }
 
 // Renderiza el campo de fecha de inicio
-function myplugin_render_start_date_field() {
+function MK20_Calendar_myplugin_render_start_date_field() {
   $start_date = get_option('myplugin_start_date');
   ?>
   <input type="date" name="myplugin_start_date" value="<?php echo esc_attr($start_date); ?>">
@@ -217,7 +219,7 @@ function myplugin_render_start_date_field() {
 }
 
 // Renderiza el campo de fecha de fin
-function myplugin_render_end_date_field() {
+function MK20_Calendar_myplugin_render_end_date_field() {
   $end_date = get_option('myplugin_end_date');
   ?>
   <input type="date" name="myplugin_end_date" value="<?php echo esc_attr($end_date); ?>">
@@ -225,7 +227,7 @@ function myplugin_render_end_date_field() {
 }
 
 // Renderiza el campo de días festivos
-function myplugin_render_holidays_field() {
+function MK20_Calendar_myplugin_render_holidays_field() {
   $holidays = get_option('myplugin_holidays');
   ?>
   <textarea name="myplugin_holidays" rows="4" cols="50"><?php echo esc_textarea($holidays); ?></textarea>
@@ -234,7 +236,7 @@ function myplugin_render_holidays_field() {
 }
 
 // Renderiza el campo de días no lectivos
-function myplugin_render_non_working_days_field() {
+function MK20_Calendar_myplugin_render_non_working_days_field() {
   $non_working_days = get_option('myplugin_non_working_days');
   ?>
   <textarea name="myplugin_non_working_days" rows="4" cols="50"><?php echo esc_textarea($non_working_days); ?></textarea>
@@ -243,7 +245,7 @@ function myplugin_render_non_working_days_field() {
 }
 
 // Renderiza el campo de fecha de inicio de infantil
-function myplugin_render_infant_start_date_field() {
+function MK20_Calendar_myplugin_render_infant_start_date_field() {
   $infant_start_date = get_option('myplugin_infant_start_date');
   ?>
   <input type="date" name="myplugin_infant_start_date" value="<?php echo esc_attr($infant_start_date); ?>">
@@ -251,7 +253,7 @@ function myplugin_render_infant_start_date_field() {
 }
 
 // Renderiza el campo de fecha de fin de infantil
-function myplugin_render_infant_end_date_field() {
+function MK20_Calendar_myplugin_render_infant_end_date_field() {
   $infant_end_date = get_option('myplugin_infant_end_date');
   ?>
   <input type="date" name="myplugin_infant_end_date" value="<?php echo esc_attr($infant_end_date); ?>">
@@ -259,7 +261,7 @@ function myplugin_render_infant_end_date_field() {
 }
 
 // Renderiza el campo de fecha de inicio de secundaria
-function myplugin_render_secundary_start_date_field() {
+function MK20_Calendar_myplugin_render_secundary_start_date_field() {
   $secundary_start_date = get_option('myplugin_secundary_start_date');
   ?>
   <input type="date" name="myplugin_secundary_start_date" value="<?php echo esc_attr($secundary_start_date); ?>">
@@ -267,7 +269,7 @@ function myplugin_render_secundary_start_date_field() {
 }
 
 // Renderiza el campo de fecha de fin de secundaria
-function myplugin_render_secundary_end_date_field() {
+function MK20_Calendar_myplugin_render_secundary_end_date_field() {
   $secundary_end_date = get_option('myplugin_secundary_end_date');
   ?>
   <input type="date" name="myplugin_secundary_end_date" value="<?php echo esc_attr($secundary_end_date); ?>">
@@ -276,7 +278,7 @@ function myplugin_render_secundary_end_date_field() {
 
 
 // Función para obtener los días de la semana de inicio de cada mes
-function obtener_dias_semana_inicio_mes($start_month, $start_year, $end_month, $end_year) {
+function MK20_Calendar_obtener_dias_semana_inicio_mes($start_month, $start_year, $end_month, $end_year) {
   $dias_semana = array();
   
   $fecha_inicio = new DateTime("{$start_year}-{$start_month}-01");
@@ -319,7 +321,7 @@ if (!function_exists('MK20_my_shortcode')) {
     $end_month = date('m', strtotime($end_date));
     $end_year = date('Y', strtotime($end_date));
     
-    $dias_semana = obtener_dias_semana_inicio_mes($start_month, $start_year, $end_month, $end_year);
+    $dias_semana = MK20_Calendar_obtener_dias_semana_inicio_mes($start_month, $start_year, $end_month, $end_year);
     
 
 $enero = $dias_semana[1];
@@ -341,7 +343,7 @@ $diciembre = $dias_semana[12];
 // Generar el contenido CSS
 $css_content = "        
     .hoja.enero li.first-day {
-      grid-column-start:". $enero .";/*colocamos el numero desde donde queremos que empiece el mes 7 es domingo*/
+      grid-column-start:". esc_html($enero) .";/*colocamos el numero desde donde queremos que empiece el mes 7 es domingo*/
     }.hoja.enero li.dia:nth-child(7n+" . (7 - $enero) . ")  {	
       background-color: var(--finde);
       color: white;
@@ -350,7 +352,7 @@ $css_content = "
       color: white;
     }     
     .hoja.febrero li.first-day {
-      grid-column-start: ". $febrero .";
+      grid-column-start: ". esc_html($febrero) .";
     }
     .hoja.febrero li.dia:nth-child(7n+" . (7 - $febrero) . ") {	
       background-color: var(--finde);
@@ -362,7 +364,7 @@ $css_content = "
     }
     
     .hoja.marzo li.first-day {
-      grid-column-start: ". $marzo .";
+      grid-column-start: ". esc_html($marzo) .";
     }
     .hoja.marzo li.dia:nth-child(7n+" . (7 - $marzo) . ") {	
       background-color: var(--finde);
@@ -374,7 +376,7 @@ $css_content = "
     }
     
     .hoja.abril li.first-day {
-      grid-column-start: ". $abril .";
+      grid-column-start: ". esc_html($abril) .";
     }
     .hoja.abril li.dia:nth-child(7n+" . (7 - $abril) . ") {	
       background-color: var(--finde);
@@ -386,7 +388,7 @@ $css_content = "
     }
     
     .hoja.mayo li.first-day {
-      grid-column-start: ". $mayo .";
+      grid-column-start: ". esc_html($mayo) .";
     }
     .hoja.mayo li.dia:nth-child(7n+" . (7 - $mayo) . ") {	
       background-color: var(--finde);
@@ -398,7 +400,7 @@ $css_content = "
     }
     
     .hoja.junio li.first-day {
-      grid-column-start: ". $junio .";
+      grid-column-start: ". esc_html($junio) .";
     }
     .hoja.junio li.dia:nth-child(7n+" . (7 - $junio) . ") {	
       background-color: var(--finde);
@@ -434,7 +436,7 @@ $css_content = "
     }*/
     
     .hoja.septiembre li.first-day {
-      grid-column-start: ". $septiembre .";
+      grid-column-start: ". esc_html($septiembre) .";
     }
     .hoja.septiembre li.dia:nth-child(7n+" . (7 - $septiembre) . ") {	
       background-color: var(--finde);
@@ -446,7 +448,7 @@ $css_content = "
     }
     
     .hoja.octubre li.first-day {
-      grid-column-start: ". $octubre .";
+      grid-column-start: ". esc_html($octubre) .";
     }
     .hoja.octubre li.dia:nth-child(7n+" . (7 - $octubre) . ") {	
       background-color: var(--finde);
@@ -458,7 +460,7 @@ $css_content = "
     }
     
     .hoja.noviembre li.first-day {
-      grid-column-start: ". $noviembre .";
+      grid-column-start: ". esc_html($noviembre) .";
     }
     .hoja.noviembre li.dia:nth-child(7n+" . (7 - $noviembre) . ") {	
       background-color: var(--finde);
@@ -470,7 +472,7 @@ $css_content = "
     }
     
     .hoja.diciembre li.first-day {
-      grid-column-start: ". $diciembre .";
+      grid-column-start: ". esc_html($diciembre) .";
     }
     .hoja.diciembre li.dia:nth-child(7n+" . (7 - $diciembre) . ") {	
       background-color: var(--finde);
@@ -660,28 +662,28 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
 
     // Verificar si el valor actual es igual a 20
     if ($dia == $dia_formateado_inicio_primaria && $mesNombre == 'septiembre') {         
-      echo '<li class="dia inicios"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Secundaria: JUEVES '. $dia .' SEPT.</p></div></li>';
+      echo '<li class="dia inicios"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Secundaria: JUEVES '. esc_html($dia) .' SEPT.</p></div></li>';
     } elseif ($dia == 1 && in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
-      echo '<li class="no-lectivo dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
+      echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
     } elseif ($dia == 1 && in_array($dia . '/' . $mesNombre, $festivos)){
-      echo '<li class="first-day fiesta dia">' . $dia . '</li>';
+      echo '<li class="first-day fiesta dia">' . esc_html($dia) . '</li>';
     } elseif ($dia == 1){
-      echo '<li class="first-day dia">' . $dia . '</li>';
+      echo '<li class="first-day dia">' . esc_html($dia) . '</li>';
     } elseif ($dia == $dia_formateado_fin_primaria && $mesNombre == 'junio'){
-      echo '<li class="dia fins"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria MIÉRCOLES ' . $dia . ' JUNIO</p></div></li>';
+      echo '<li class="dia fins"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria MIÉRCOLES ' . esc_html($dia) . ' JUNIO</p></div></li>';
     } elseif ($dia == $dia_formateado_inicio_secundaria && $mesNombre == 'septiembre'){
-      echo '<li class="dia inicioi"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Infantil y primaria: VIERNES' . $dia . 'SEPT.</p></div></li>';
+      echo '<li class="dia inicioi"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Infantil y primaria: VIERNES' . esc_html($dia) . 'SEPT.</p></div></li>';
     } elseif ($dia == $dia_formateado_fin_secundaria && $mesNombre == 'junio'){
-      echo '<li id="final" class="fini dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria JUEVES ' . $dia . ' JUNIO</p></div></li>';                  
+      echo '<li id="final" class="fini dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria JUEVES ' . esc_html($dia) . ' JUNIO</p></div></li>';                  
     } elseif (in_array($dia . '/' . $mesNombre, $festivos)) {
-      echo '<li class="fiesta dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria JUEVES ' . $dia . ' JUNIO</p></div></li>';
+      echo '<li class="fiesta dia">' . esc_html($dia) . '</li>';
     } elseif ($dia == 29 && in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
-      echo '<li class="no-lectivo dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota">Fecha Patrón Localidad: Lunes ' . $dia . ' NOVIEMBRE</p></div></li>';
+      echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota">Fecha Patrón Localidad: Lunes ' . esc_html($dia) . ' NOVIEMBRE</p></div></li>';
     } elseif (in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
-      echo '<li class="no-lectivo dia"><span class="numero">' . $dia . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
+      echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
     }
     else {
-      echo '<li class="dia">' . $dia . '</li>';
+      echo '<li class="dia">' . esc_html($dia) . '</li>';
     } 
 
   }
@@ -706,7 +708,7 @@ return $html;
 
  
 //Encolar estilos propios
-function MK20_encolar_estilos_propios_calendar() {
+function MK20_Calendar_encolar_estilos_propios_calendar() {
   global $post;
 
   if ( is_a( $post, 'WP_Post' ) ) {
@@ -724,17 +726,17 @@ function MK20_encolar_estilos_propios_calendar() {
     }
   }
 }
-add_action( 'wp_enqueue_scripts', 'MK20_encolar_estilos_propios_calendar' );
+add_action( 'wp_enqueue_scripts', 'MK20_Calendar_encolar_estilos_propios_calendar' );
 
 
 
 //Load texdomain
 
-if (!function_exists('MK20_load_plugin_textdomain_calendar')) {
+if (!function_exists('MK20_Calendar_load_plugin_textdomain_calendar')) {
 
-	function MK20_load_plugin_textdomain_calendar()
+	function MK20_Calendar_load_plugin_textdomain_calendar()
 	{
 		load_plugin_textdomain('MK20-Calendario', FALSE, plugin_basename(dirname(__FILE__)) . '/languages/');
 	}
-	add_action('plugins_loaded', 'Mk20_load_plugin_textdomain_calendar');  
+	add_action('plugins_loaded', 'Mk20_Calendar_load_plugin_textdomain_calendar');  
 }  
