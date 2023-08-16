@@ -13,6 +13,50 @@
 	--redondear: 20px;
 	--finde:red;
 }
+/*Tipografía variable para la web*/
+/* latin */
+@font-face {
+  font-family: 'Grandstander'; 
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(../admin/assets/fonts/grandstander.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: 'Grandstander';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(../admin/assets/fonts/grandstander-italic.woff2) format('woff2');
+}
+
+/* latin */
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(../admin/assets/fonts/raleway.woff2) format('woff2');}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  font-weight:400;
+}
+
+h1{
+  font-family: 'Grandstander', cursive;
+  font-weight:900;		
+}
+h2,h3,h4,h5,h6{
+  font-family: 'Grandstander', cursive;
+  font-weight:600;
+	font-style:italic;
+}
+
+p .text_shadow{
+  text-shadow: -1px 0 var(--white), 0 10px var(--white), 10px 0 var(--white), 0 -1px var(--white) !important;
+}
 
 .entry-content ul, .entry-content ol {
   padding: inherit;

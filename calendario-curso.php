@@ -206,7 +206,7 @@ add_action('admin_init', 'MK20_Calendar_myplugin_register_settings');
 // Renderiza la sección de ajustes
 function MK20_Calendar_myplugin_render_settings_section() {
   echo '<p>Seleccione los campos necesarios en ajustes para crear el calendario:</p>';
-  echo '<p>' . esc_html_e("Para poder asignar el calendario en las páginas hay que añadir el shortcode [calendario].", "MK20-Calendario") . '</p>';
+  echo '<p>' . esc_html_e("Una vez incluidos los campos de ajustes debes de colocar este shortcode [calendario] en la página donde quieras que se muestre el calendario.", "MK20-Calendario") . '</p>';
 
 }
 
@@ -579,8 +579,10 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
   // Obtener el número de días del mes
   $diasMes = cal_days_in_month(CAL_GREGORIAN, $mesNumero, $anio);
 
-  
-  
+  // Definir arreglo de nombres de días en español
+  $dias_nombre = array('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo');
+
+   
   echo '<div class="hoja ' . $mesNombre . '"><h2>' . $mesNombre . '</h2>';
   echo '<ul class="calendar">';
   echo '<li class="weekday">L</li>
@@ -597,9 +599,13 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
     $festivos_array = preg_split('/\s*,\s*/', $dias_festivos);    
     $dias_no_lectivos = get_option('myplugin_non_working_days');
     $no_lectivos_array = preg_split('/\s*,\s*/', $dias_no_lectivos);  
+           
     
     $festivos = array(); // Array para almacenar los días festivos
     $no_lectivos = array(); // Array para almacenar los días festivos
+
+     // Calcula el día de la semana
+    $diaSemana = date('N', strtotime($anio . '-' . $mesNombre . '-' . $dia));
     
     $meses = array(
       9 => 'septiembre',
@@ -636,7 +642,8 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
         }
     }
 
-      $fechas_no_lectivas = array(); // Array para almacenar las fechas no lectivas formateadas
+      $fechas_no_lectivas = array(); // Array para almacenar las fechas no lectivas formateadas  
+
 
       foreach ($no_lectivos_array as $fechas_no_lectivas) {
           $fechas_no_lectivas = explode("\n", $fechas_no_lectivas); // Dividir las fechas por saltos de línea (si es necesario)
@@ -649,7 +656,7 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
                   $anio_nl = intval($datos_fecha_no_lectiva[2]);
 
                   // Obtener el nombre del mes desde el array $meses (opcional)
-                  $nombre_mes_nl = $meses[$mes_nl] ?? '';
+                  $nombre_mes_nl = $meses[$mes_nl] ?? '';                  
 
                   // Formatear la fecha en el formato "día/mes" y agregarla al array de fechas no lectivas
                   $fechas_no_lectivas[] = $dia_nl . '/' . $nombre_mes_nl;
@@ -678,7 +685,7 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
     } elseif (in_array($dia . '/' . $mesNombre, $festivos)) {
       echo '<li class="fiesta dia">' . esc_html($dia) . '</li>';
     } elseif ($dia == 29 && in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
-      echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota">Fecha Patrón Localidad: Lunes ' . esc_html($dia) . ' NOVIEMBRE</p></div></li>';
+      echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota">Fecha Patrón Localidad: ' . esc_html($dias_nombre[$diaSemana-1]) . ' ' . esc_html($dia) . ' NOVIEMBRE</p></div></li>';
     } elseif (in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
       echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
     }
@@ -697,11 +704,6 @@ $html = ob_get_clean();
 return $html;          
 }
 }
-
-
-
-
-
 
   
 
