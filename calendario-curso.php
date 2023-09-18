@@ -545,7 +545,6 @@ $mes_nombre_inicio_secundaria = $meses[(int)$mes_numero_inicio_secundaria];
 $mes_nombre_fin_secundaria = $meses[(int)$mes_numero_fin_secundaria];
 
 
-
 // Formatear los valores de los días
 $dia_formateado_inicio_primaria = ltrim($dia_inicio_primaria, '0');
 $dia_formateado_fin_primaria = ltrim($dia_fin_primaria, '0');
@@ -559,6 +558,33 @@ $mes_fecha = intval($datos_fechas[1]);
 $anio_fecha = intval($datos_fechas[2]);
 
 $mes_nombre = $meses[$mes_fecha];
+
+function obtenerNombreDiaSemana($fecha) {
+  // Convertir la fecha en un objeto DateTime
+  $fecha_objeto = new DateTime($fecha);
+  
+  // Obtener el nombre del día de la semana en español
+  $nombre_dia_semana = $fecha_objeto->format('l'); // 'l' devuelve el nombre completo del día
+  
+  // Puedes personalizar los nombres de los días en español si es necesario
+  $nombres_dias_espanol = array(
+      'Monday' => 'Lunes',
+      'Tuesday' => 'Martes',
+      'Wednesday' => 'Miércoles',
+      'Thursday' => 'Jueves',
+      'Friday' => 'Viernes',
+      'Saturday' => 'Sábado',
+      'Sunday' => 'Domingo'
+  );
+  
+  return $nombres_dias_espanol[$nombre_dia_semana];
+}
+
+// Obtener el día de la semana para las fechas de inicio y fin de primaria y secundaria
+$diaSemana_inicio_primaria = obtenerNombreDiaSemana($fecha_inicio_primaria);
+$diaSemana_fin_primaria = obtenerNombreDiaSemana($fecha_fin_primaria);
+$diaSemana_inicio_secundaria = obtenerNombreDiaSemana($fecha_inicio_secundaria);
+$diaSemana_fin_secundaria = obtenerNombreDiaSemana($fecha_fin_secundaria);
 
 //echo $dia_fecha . '/' . $mes_nombre . '/' . $anio_fecha; // Imprime la fecha en formato "día/mes/año"
 
@@ -579,10 +605,7 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
   // Obtener el número de días del mes
   $diasMes = cal_days_in_month(CAL_GREGORIAN, $mesNumero, $anio);
 
-  // Definir arreglo de nombres de días en español
-  $dias_nombre = array('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo');
-
-   
+    
   echo '<div class="hoja ' . $mesNombre . '"><h2>' . $mesNombre . '</h2>';
   echo '<ul class="calendar">';
   echo '<li class="weekday">L</li>
@@ -605,8 +628,8 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
     $no_lectivos = array(); // Array para almacenar los días festivos
 
      // Calcula el día de la semana
-    $diaSemana = date('N', strtotime($anio . '-' . $mesNombre . '-' . $dia));
-    
+    $diaSemana = date('N', strtotime($anio . '-' . $mesNombre . '-' . $dia));  
+               
     $meses = array(
       9 => 'septiembre',
       10 => 'octubre',
@@ -653,23 +676,43 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
               if (count($datos_fecha_no_lectiva) === 3) {
                   $dia_nl = intval($datos_fecha_no_lectiva[0]);
                   $mes_nl = intval($datos_fecha_no_lectiva[1]);
-                  $anio_nl = intval($datos_fecha_no_lectiva[2]);
+                  $anio_nl = intval($datos_fecha_no_lectiva[2]);                  
 
                   // Obtener el nombre del mes desde el array $meses (opcional)
                   $nombre_mes_nl = $meses[$mes_nl] ?? '';                  
 
                   // Formatear la fecha en el formato "día/mes" y agregarla al array de fechas no lectivas
                   $fechas_no_lectivas[] = $dia_nl . '/' . $nombre_mes_nl;
-              }
+              }             
           }
       }
 
- 
-        
+    $fechaBuscada = null; // Variable para almacenar la fecha correspondiente al 29 de noviembre
+
+      foreach ($fechas_no_lectivas as $fecha_no_lectiva) {
+          // Limpia la fecha de espacios en blanco y otros caracteres no deseados
+          $fecha_no_lectiva = trim($fecha_no_lectiva);
+      
+          // Divide la fecha en día, mes y año
+          $datos_fecha_no_lectiva = explode('/', $fecha_no_lectiva);
+      
+          // Verifica si la fecha es el 29 de noviembre
+          if (count($datos_fecha_no_lectiva) === 3 &&
+              intval($datos_fecha_no_lectiva[0]) === 29 &&
+              intval($datos_fecha_no_lectiva[1]) === 11) {
+              // Reformatea la fecha al formato "Y-m-d"
+              $fechaReformateada = $datos_fecha_no_lectiva[2] . '-' . $datos_fecha_no_lectiva[1] . '-' . $datos_fecha_no_lectiva[0];
+              $fechaBuscada = $fechaReformateada;
+              break; // Si encontramos la fecha, salimos del bucle
+          }
+      }
+      
+      $nombreDiaSemanapatron = obtenerNombreDiaSemana($fechaBuscada); 
+     
 
     // Verificar si el valor actual es igual a 20
     if ($dia == $dia_formateado_inicio_primaria && $mesNombre == 'septiembre') {         
-      echo '<li class="dia inicios"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Secundaria: JUEVES '. esc_html($dia) .' SEPT.</p></div></li>';
+      echo '<li class="dia inicios"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Secundaria: ' . esc_html($diaSemana_inicio_primaria) . ' '. esc_html($dia) .' ' . esc_html($mesNombre) .'.</p></div></li>';
     } elseif ($dia == 1 && in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
       echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
     } elseif ($dia == 1 && in_array($dia . '/' . $mesNombre, $festivos)){
@@ -677,15 +720,15 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
     } elseif ($dia == 1){
       echo '<li class="first-day dia">' . esc_html($dia) . '</li>';
     } elseif ($dia == $dia_formateado_fin_primaria && $mesNombre == 'junio'){
-      echo '<li class="dia fins"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria MIÉRCOLES ' . esc_html($dia) . ' JUNIO</p></div></li>';
+      echo '<li class="dia fins"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria ' . esc_html($diaSemana_fin_primaria) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';
     } elseif ($dia == $dia_formateado_inicio_secundaria && $mesNombre == 'septiembre'){
-      echo '<li class="dia inicioi"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Infantil y primaria: VIERNES' . esc_html($dia) . 'SEPT.</p></div></li>';
+      echo '<li class="dia inicioi"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Infantil y primaria: ' . esc_html($diaSemana_inicio_secundaria) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';
     } elseif ($dia == $dia_formateado_fin_secundaria && $mesNombre == 'junio'){
-      echo '<li id="final" class="fini dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria JUEVES ' . esc_html($dia) . ' JUNIO</p></div></li>';                  
+      echo '<li id="final" class="fini dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria ' . esc_html($diaSemana_fin_secundaria) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';                  
     } elseif (in_array($dia . '/' . $mesNombre, $festivos)) {
       echo '<li class="fiesta dia">' . esc_html($dia) . '</li>';
     } elseif ($dia == 29 && in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
-      echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota">Fecha Patrón Localidad: ' . esc_html($dias_nombre[$diaSemana-1]) . ' ' . esc_html($dia) . ' NOVIEMBRE</p></div></li>';
+      echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota">Fecha Patrón Localidad: ' . esc_html($nombreDiaSemanapatron) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';
     } elseif (in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
       echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
     }
@@ -704,10 +747,6 @@ $html = ob_get_clean();
 return $html;          
 }
 }
-
-  
-
-
  
 //Encolar estilos propios
 function MK20_Calendar_encolar_estilos_propios_calendar() {
