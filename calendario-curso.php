@@ -712,7 +712,7 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
 
     // Verificar si el valor actual es igual a 20
     if ($dia == $dia_formateado_inicio_primaria && $mesNombre == 'septiembre') {         
-      echo '<li class="dia inicios"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Secundaria: ' . esc_html($diaSemana_inicio_primaria) . ' '. esc_html($dia) .' ' . esc_html($mesNombre) .'.</p></div></li>';
+      echo '<li class="dia inicios"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de infantil y primaria: ' . esc_html($diaSemana_inicio_primaria) . ' '. esc_html($dia) .' ' . esc_html($mesNombre) .'.</p></div></li>';
     } elseif ($dia == 1 && in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
       echo '<li class="no-lectivo dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fechas no lectivas</h4><p class="nota"></p></div></li>';
     } elseif ($dia == 1 && in_array($dia . '/' . $mesNombre, $festivos)){
@@ -720,11 +720,11 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
     } elseif ($dia == 1){
       echo '<li class="first-day dia">' . esc_html($dia) . '</li>';
     } elseif ($dia == $dia_formateado_fin_primaria && $mesNombre == 'junio'){
-      echo '<li class="dia fins"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria ' . esc_html($diaSemana_fin_primaria) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';
+      echo '<li class="dia fins"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de infantil y primaria ' . esc_html($diaSemana_fin_primaria) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';
     } elseif ($dia == $dia_formateado_inicio_secundaria && $mesNombre == 'septiembre'){
-      echo '<li class="dia inicioi"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de Infantil y primaria: ' . esc_html($diaSemana_inicio_secundaria) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';
+      echo '<li class="dia inicioi"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Inicio clases</h4><p class=\"nota\">Fecha de comienzo de las clases de secundaria: ' . esc_html($diaSemana_inicio_secundaria) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';
     } elseif ($dia == $dia_formateado_fin_secundaria && $mesNombre == 'junio'){
-      echo '<li id="final" class="fini dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de Secundaria ' . esc_html($diaSemana_fin_secundaria) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';                  
+      echo '<li id="final" class="fini dia"><span class="numero">' . esc_html($dia) . '</span><div class="ventana"><h4>Fin de curso</h4><p class=\"nota\">Fecha de finalización de las clases de secundaria ' . esc_html($diaSemana_fin_secundaria) . ' ' . esc_html($dia) . ' ' . esc_html($mesNombre) .'.</p></div></li>';                  
     } elseif (in_array($dia . '/' . $mesNombre, $festivos)) {
       echo '<li class="fiesta dia">' . esc_html($dia) . '</li>';
     } elseif ($dia == 29 && in_array($dia . '/' . $mesNombre, $fechas_no_lectivas)){
