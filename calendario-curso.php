@@ -7,7 +7,7 @@ Author: Oscar Domingo
 Version: 1.0.0
 Author URI: https://merka20.com
 Requires at least: 5.0
-Tested up to: 5.9.1
+Tested up to: 6.6.1
 Requires PHP: 7.4
 
 Text Domain: MK20-Calendario
