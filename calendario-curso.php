@@ -560,24 +560,29 @@ $anio_fecha = intval($datos_fechas[2]);
 $mes_nombre = $meses[$mes_fecha];
 
 function obtenerNombreDiaSemana($fecha) {
-  // Convertir la fecha en un objeto DateTime
-  $fecha_objeto = new DateTime($fecha);
-  
-  // Obtener el nombre del día de la semana en español
-  $nombre_dia_semana = $fecha_objeto->format('l'); // 'l' devuelve el nombre completo del día
-  
-  // Puedes personalizar los nombres de los días en español si es necesario
-  $nombres_dias_espanol = array(
-      'Monday' => 'Lunes',
-      'Tuesday' => 'Martes',
-      'Wednesday' => 'Miércoles',
-      'Thursday' => 'Jueves',
-      'Friday' => 'Viernes',
-      'Saturday' => 'Sábado',
-      'Sunday' => 'Domingo'
-  );
-  
-  return $nombres_dias_espanol[$nombre_dia_semana];
+  // Verificar si la fecha no es null y es una cadena no vacía
+  if ($fecha && is_string($fecha)) {
+    // Convertir la fecha en un objeto DateTime
+    $fecha_objeto = new DateTime($fecha);
+    
+    // Obtener el nombre del día de la semana en español
+    $nombre_dia_semana = $fecha_objeto->format('l'); // 'l' devuelve el nombre completo del día
+    
+    // Puedes personalizar los nombres de los días en español si es necesario
+    $nombres_dias_espanol = array(
+        'Monday' => 'Lunes',
+        'Tuesday' => 'Martes',
+        'Wednesday' => 'Miércoles',
+        'Thursday' => 'Jueves',
+        'Friday' => 'Viernes',
+        'Saturday' => 'Sábado',
+        'Sunday' => 'Domingo'
+    );
+    
+    return $nombres_dias_espanol[$nombre_dia_semana];
+  } else {
+    return 'Fecha no válida';
+  }
 }
 
 // Obtener el día de la semana para las fechas de inicio y fin de primaria y secundaria
