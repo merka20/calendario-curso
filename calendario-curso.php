@@ -12,6 +12,8 @@ Requires PHP: 7.4
 
 Text Domain: MK20-Calendario
 Domain Path: /languages
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
 if (!defined('ABSPATH')) {
 	echo 'Hi there!  I\'m just a plugin, not much I can do when called directly.';
@@ -289,7 +291,7 @@ function MK20_Calendar_obtener_dias_semana_inicio_mes($start_month, $start_year,
       $mes = $fecha_inicio->format('n');
 
       $primer_dia = strtotime("{$anio}-{$mes}-01");
-      $dia_semana = date('N', $primer_dia);
+      $dia_semana = (int) gmdate('N', $primer_dia);
 
       $dias_semana[$mes] = $dia_semana;
 
@@ -316,10 +318,19 @@ if (!function_exists('MK20_my_shortcode')) {
  
     $start_date = get_option('myplugin_start_date');
     $end_date = get_option('myplugin_end_date');
-    $start_month = date('m', strtotime($start_date));
+    // Convertir las fechas a timestamps en formato GMT/UTC
+    $start_timestamp = strtotime($start_date . ' GMT');
+    $end_timestamp = strtotime($end_date . ' GMT');
+
+    // Obtener el mes y año en formato GMT/UTC usando gmdate()
+    $start_month = gmdate('m', $start_timestamp);
+    $start_year = gmdate('Y', $start_timestamp);
+    $end_month = gmdate('m', $end_timestamp);
+    $end_year = gmdate('Y', $end_timestamp);
+    /*$start_month = date('m', strtotime($start_date));
     $start_year = date('Y', strtotime($start_date));
     $end_month = date('m', strtotime($end_date));
-    $end_year = date('Y', strtotime($end_date));
+    $end_year = date('Y', strtotime($end_date));*/
     
     $dias_semana = MK20_Calendar_obtener_dias_semana_inicio_mes($start_month, $start_year, $end_month, $end_year);
     
@@ -339,7 +350,13 @@ $diciembre = $dias_semana[12];
 /*$infant_end_date = get_option('myplugin_infant_end_date');
    // Convertir la fecha en un objeto de fecha de JavaScript
    $infant_end_date_js = date('Y/m/d', strtotime($infant_end_date));*/
+if ( ! function_exists( 'WP_Filesystem' ) ) {
+    require_once( ABSPATH . 'wp-admin/includes/file.php' );
+}
 
+// Inicializar el sistema de archivos
+WP_Filesystem();
+global $wp_filesystem;
 // Generar el contenido CSS
 $css_content = "        
     .hoja.enero li.first-day {
@@ -490,9 +507,10 @@ $plugin_dir = plugin_dir_path(__FILE__);
 $css_file = $plugin_dir . 'admin/css/estilo_meses.css';
 
 // Guardar el contenido CSS en el archivo
-file_put_contents($css_file, $css_content);  
-
-   ob_start();
+ob_start();
+// Verificar que WP_Filesystem esté inicializado y usarlo para escribir el archivo
+if ( $wp_filesystem ) {
+  $wp_filesystem->put_contents( $css_file, $css_content, FS_CHMOD_FILE );}
 
 // Definir array de nombres de los meses en español
 $meses = array(
@@ -596,7 +614,13 @@ $diaSemana_fin_secundaria = obtenerNombreDiaSemana($fecha_fin_secundaria);
 echo '<div class="calendar-wrapper">';
 
 $start_date = get_option('myplugin_start_date'); // Obtener la fecha de inicio desde la opción de WordPress
-$mesNumero = date('n', strtotime($start_date)); // Obtener el número de mes de la fecha de inicio
+
+// Convertir la fecha a timestamp en formato GMT/UTC
+$start_timestamp = strtotime($start_date . ' GMT');
+
+// Obtener el mes en formato GMT/UTC usando gmdate()
+$mesNumero = gmdate('n', $start_timestamp); // Obtener el número de mes de la fecha de inicio
+//$mesNumero = date('n', strtotime($start_date)); // Obtener el número de mes de la fecha de inicio
 
 // Encontrar la posición del mes de inicio en el array $meses
 $posicion = array_search($meses[$mesNumero], $meses);
@@ -605,13 +629,14 @@ $posicion = array_search($meses[$mesNumero], $meses);
 for ($i = $posicion; $i < $posicion + 10; $i++) {
   $mesNumero = ($i > 12) ? $i - 12 : $i;
   $mesNombre = $meses[$mesNumero];
-  $anio = ($i > 12) ? intval(date('Y', strtotime($start_date))) + 1 : intval(date('Y', strtotime($start_date)));
-
+  //$anio = ($i > 12) ? intval(date('Y', strtotime($start_date))) + 1 : intval(date('Y', strtotime($start_date)));
+  $anio = ($i > 12) ? intval(gmdate('Y', strtotime($start_date . ' GMT'))) + 1 : intval(gmdate('Y', strtotime($start_date . ' GMT')));
+  
   // Obtener el número de días del mes
   $diasMes = cal_days_in_month(CAL_GREGORIAN, $mesNumero, $anio);
 
     
-  echo '<div class="hoja ' . $mesNombre . '"><h2>' . $mesNombre . '</h2>';
+  echo '<div class="hoja ' . esc_attr($mesNombre) . '"><h2>' . esc_html($mesNombre) . '</h2>';
   echo '<ul class="calendar">';
   echo '<li class="weekday">L</li>
   <li class="weekday">M</li>
@@ -632,9 +657,8 @@ for ($i = $posicion; $i < $posicion + 10; $i++) {
     $festivos = array(); // Array para almacenar los días festivos
     $no_lectivos = array(); // Array para almacenar los días festivos
 
-     // Calcula el día de la semana
-    $diaSemana = date('N', strtotime($anio . '-' . $mesNombre . '-' . $dia));  
-               
+     // Calcula el día de la semana     
+    $diaSemana = gmdate('N', strtotime($anio . '-' . $mesNombre . '-' . $dia . ' GMT'));               
     $meses = array(
       9 => 'septiembre',
       10 => 'octubre',
@@ -761,9 +785,15 @@ function MK20_Calendar_encolar_estilos_propios_calendar() {
     $has_shortcode = has_shortcode( $post->post_content, 'calendario' );
 
     if ( $has_shortcode ) {
-      wp_register_style( 'plugin-shortcode-css', plugin_dir_url( __FILE__ ) . 'admin/css/estilo_meses.css' );
-      wp_register_style( 'csspropio', plugin_dir_url( __FILE__ ) . 'admin/css/style.css' );
 
+// Obtener la URL y ruta del directorio del plugin
+      $plugin_url = plugin_dir_url( __FILE__ );
+      $plugin_dir = plugin_dir_path( __FILE__ );
+
+      // Registrar los estilos con versiones basadas en la fecha de última modificación del archivo
+      wp_register_style( 'plugin-shortcode-css', $plugin_url . 'admin/css/estilo_meses.css', array(), file_exists( $plugin_dir . 'admin/css/estilo_meses.css' ) ? filemtime( $plugin_dir . 'admin/css/estilo_meses.css' ) : null );
+      wp_register_style( 'csspropio', $plugin_url . 'admin/css/style.css', array(), file_exists( $plugin_dir . 'admin/css/style.css' ) ? filemtime( $plugin_dir . 'admin/css/style.css' ) : null );
+         
       wp_enqueue_style( 'plugin-shortcode-css' );
       wp_enqueue_style( 'csspropio' );
 
@@ -776,13 +806,13 @@ add_action( 'wp_enqueue_scripts', 'MK20_Calendar_encolar_estilos_propios_calenda
 
 
 
-//Load texdomain
-
+// Load textdomain
 if (!function_exists('MK20_Calendar_load_plugin_textdomain_calendar')) {
 
-	function MK20_Calendar_load_plugin_textdomain_calendar()
-	{
-		load_plugin_textdomain('MK20-Calendario', FALSE, plugin_basename(dirname(__FILE__)) . '/languages/');
-	}
-	add_action('plugins_loaded', 'Mk20_Calendar_load_plugin_textdomain_calendar');  
-}  
+  function MK20_Calendar_load_plugin_textdomain_calendar()
+  {
+      // Usar una cadena vacía para el segundo parámetro
+      load_plugin_textdomain('MK20-Calendario', false, plugin_basename(dirname(__FILE__)) . '/languages/');
+  }
+  add_action('plugins_loaded', 'MK20_Calendar_load_plugin_textdomain_calendar');  
+}
